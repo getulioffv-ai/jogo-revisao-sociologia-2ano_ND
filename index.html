@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trilha Sociológica — Revisão do 3º trimestre</title>
+<meta name="description" content="Jogo de revisão de Sociologia para a 2ª série do Ensino Médio: desigualdade, Foucault, controle social, trabalho e ética no ambiente virtual.">
+<style>
+:root{
+  --verde:#1E5631; --verde2:#2E7D52; --escuro:#143823; --ouro:#C9962B; --ouro-claro:#F6E7C1;
+  --vinho:#9C2B2B; --vinho-claro:#F7E3E1; --ok:#1F7A46; --ok-claro:#E0F1E6;
+  --fundo:#F4EFE3; --papel:#FFFDF8; --linha:#DDD3BE; --texto:#1F2A22; --suave:#5C665E;
+  --raio:16px; --sombra:0 2px 0 rgba(20,56,35,.12), 0 10px 24px rgba(20,56,35,.08);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--fundo);color:var(--texto);font:17px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:3px solid var(--ouro);outline-offset:2px}
+h1,h2,h3,p{margin:0}
+
+.topo{background:var(--verde);color:#fff;position:sticky;top:0;z-index:5}
+.topo-in{max-width:880px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.marca{background:none;border:0;color:#fff;font-weight:800;letter-spacing:.2px;padding:6px 0;text-align:left;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.marca small{display:block;font-weight:500;opacity:.8;font-size:12px;letter-spacing:.6px;text-transform:uppercase}
+.placar{display:flex;gap:8px;flex-shrink:0}
+.pill{background:rgba(255,255,255,.14);border-radius:999px;padding:6px 12px;font-weight:700;font-size:15px;white-space:nowrap}
+.pill b{color:#FFE29A}
+.barra{height:6px;background:rgba(255,255,255,.18)}
+.barra i{display:block;height:100%;width:0;background:var(--ouro);transition:width .35s ease}
+
+main{flex:1;width:100%;max-width:880px;margin:0 auto;padding:20px 16px 40px}
+.rodape{text-align:center;color:var(--suave);font-size:13px;padding:16px}
+
+/* início */
+.capa{background:var(--escuro);color:#fff;border-radius:22px;padding:26px 22px;box-shadow:var(--sombra);position:relative;overflow:hidden}
+.capa::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;border:26px solid rgba(201,150,43,.28)}
+.capa .sobre{font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:#FFE29A;font-weight:700}
+.capa h1{font-size:clamp(28px,7vw,40px);line-height:1.1;margin:6px 0 10px;position:relative;z-index:1}
+.capa p{max-width:520px;opacity:.92;position:relative;z-index:1}
+.resumo{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;position:relative;z-index:1}
+.resumo span{background:rgba(255,255,255,.12);border-radius:12px;padding:8px 12px;font-size:14px}
+.resumo b{color:#FFE29A;font-size:18px}
+
+.sec{font-size:13px;letter-spacing:1.2px;text-transform:uppercase;color:var(--suave);font-weight:800;margin:26px 4px 10px}
+.trilha{display:grid;gap:12px}
+.fase{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--papel);border:2px solid var(--linha);border-radius:var(--raio);padding:14px;box-shadow:var(--sombra);transition:border-color .12s ease,box-shadow .12s ease}
+.fase:hover{border-color:var(--verde2);box-shadow:0 0 0 3px rgba(46,125,82,.18),var(--sombra)}
+.num{flex:0 0 52px;height:52px;border-radius:50%;background:var(--verde);color:#fff;display:grid;place-items:center;font-weight:800;font-size:22px}
+.fase.feita .num{background:var(--ouro);color:var(--escuro)}
+.fase .txt{flex:1;min-width:0}
+.fase .cap{font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:var(--verde2);font-weight:800}
+.fase h3{font-size:19px;line-height:1.2}
+.fase .tema{color:var(--suave);font-size:14.5px}
+.estrelas{font-size:20px;letter-spacing:2px;color:#CFC6B2;white-space:nowrap}
+.estrelas .on{color:var(--ouro)}
+.fase.relampago{background:var(--ouro-claro);border-color:var(--ouro)}
+.fase.relampago .num{background:var(--vinho)}
+.como{background:var(--papel);border:2px dashed var(--linha);border-radius:var(--raio);padding:14px 16px;color:var(--suave);font-size:15.5px}
+.como b{color:var(--texto)}
+
+/* rodada */
+.cab{display:flex;align-items:flex-start;gap:12px;margin-bottom:6px}
+.cab .onde{font-size:12px;letter-spacing:.9px;text-transform:uppercase;color:var(--verde2);font-weight:800}
+.cab h2{font-size:clamp(22px,5.4vw,28px);line-height:1.15}
+.cab .cont{margin-left:auto;background:var(--papel);border:2px solid var(--linha);border-radius:999px;padding:4px 12px;font-weight:800;color:var(--verde);white-space:nowrap}
+.dica{color:var(--suave);font-size:15.5px;margin:6px 0 16px}
+
+.carta{background:var(--papel);border:2px solid var(--linha);border-radius:20px;padding:22px 18px;box-shadow:var(--sombra);font-size:clamp(19px,4.6vw,23px);font-weight:700;line-height:1.3;text-align:center;min-height:120px;display:grid;place-items:center}
+.carta.pergunta{font-size:clamp(17px,4.2vw,20px);font-weight:600;text-align:left;place-items:start}
+.opcoes{display:grid;gap:10px;margin-top:14px}
+.opcoes.baldes{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.op{background:var(--papel);border:2px solid var(--verde);border-radius:14px;padding:13px 14px;min-height:52px;font-weight:700;text-align:left;color:var(--escuro);transition:background .12s ease,box-shadow .12s ease}
+.baldes .op{text-align:center;background:var(--verde);color:#fff}
+.op:hover:not(:disabled){box-shadow:0 0 0 3px rgba(46,125,82,.25)}
+.op:disabled{cursor:default;opacity:.55}
+.op.certa{background:var(--ok-claro);border-color:var(--ok);color:#0E4A29;opacity:1}
+.op.errada{background:var(--vinho-claro);border-color:var(--vinho);color:#6E1D1D;opacity:1}
+.op.certa::before{content:"✓ ";font-weight:900}
+.op.errada::before{content:"✗ ";font-weight:900}
+
+.retorno{margin-top:16px;border-radius:var(--raio);padding:14px 16px;border:2px solid var(--ok);background:var(--ok-claro)}
+.retorno.nao{border-color:var(--vinho);background:var(--vinho-claro)}
+.retorno strong{display:block;font-size:17px}
+.retorno p{margin-top:2px}
+.retorno .resp{font-weight:700;margin-top:4px}
+.acoes{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.btn{background:var(--verde);color:#fff;border:0;border-radius:14px;padding:13px 20px;font-weight:800;min-height:50px}
+.btn.sec2{background:transparent;color:var(--verde);border:2px solid var(--verde)}
+.btn.ouro{background:var(--ouro);color:var(--escuro)}
+.btn:hover{filter:brightness(1.07)}
+
+/* pares */
+.fichas{display:flex;flex-wrap:wrap;gap:8px;position:sticky;top:64px;background:var(--fundo);padding:8px 0;z-index:3}
+.ficha{background:var(--papel);border:2px solid var(--verde);border-radius:999px;padding:9px 14px;font-weight:800;color:var(--verde);min-height:44px}
+.ficha.sel{background:var(--verde);color:#fff}
+.ficha:disabled{opacity:.35;text-decoration:line-through;cursor:default}
+.descs{display:grid;gap:10px;margin-top:8px}
+.desc{background:var(--papel);border:2px solid var(--linha);border-radius:14px;padding:13px 14px;text-align:left;min-height:52px;width:100%}
+.desc.sel{border-color:var(--ouro);background:var(--ouro-claro)}
+.desc.ok{border-color:var(--ok);background:var(--ok-claro);cursor:default}
+.desc .tag{display:inline-block;background:var(--ok);color:#fff;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:800;margin-bottom:4px}
+.desc .ex{display:block;color:#0E4A29;font-size:14.5px;margin-top:4px}
+.treme{animation:treme .32s}
+@keyframes treme{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.aviso{min-height:26px;margin-top:10px;font-weight:700;color:var(--vinho)}
+
+/* ordem */
+.lista{display:grid;gap:8px;padding:0;margin:0;list-style:none}
+.lista li{display:flex;align-items:center;gap:10px;background:var(--papel);border:2px solid var(--linha);border-radius:14px;padding:8px 10px}
+.lista .pos{flex:0 0 30px;height:30px;border-radius:50%;background:var(--verde);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px}
+.lista .tx{flex:1;font-weight:600}
+.lista .ano{font-weight:800;color:var(--verde);margin-right:6px}
+.seta{flex:0 0 44px;height:44px;border-radius:12px;border:2px solid var(--verde);background:#fff;font-size:18px;font-weight:800;color:var(--verde)}
+.seta:disabled{opacity:.3;cursor:default}
+.lista li.ok{border-color:var(--ok);background:var(--ok-claro)}
+.lista li.no{border-color:var(--vinho);background:var(--vinho-claro)}
+
+/* fim de fase */
+.fim{background:var(--papel);border:2px solid var(--linha);border-radius:22px;padding:26px 20px;text-align:center;box-shadow:var(--sombra)}
+.fim .estrelas{font-size:46px;letter-spacing:6px;display:block;margin:6px 0}
+.fim h2{font-size:26px}
+.fim .nums{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:14px 0}
+.fim .nums div{background:var(--fundo);border-radius:14px;padding:10px 16px;min-width:110px}
+.fim .nums b{display:block;font-size:26px;color:var(--verde)}
+.fim .nums span{font-size:13px;color:var(--suave)}
+.fim .acoes{justify-content:center}
+.rever{text-align:left;margin-top:18px}
+.rever h3{font-size:15px;letter-spacing:.8px;text-transform:uppercase;color:var(--vinho);margin-bottom:8px}
+.rever ul{margin:0;padding-left:20px}
+.rever li{margin-bottom:8px}
+.rever li span{display:block;color:var(--suave);font-size:15px}
+
+/* relâmpago */
+.relogio{font-variant-numeric:tabular-nums}
+.relogio.fim-tempo{color:var(--vinho);border-color:var(--vinho)}
+.vf{grid-template-columns:1fr 1fr}
+.vf .op{text-align:center;font-size:19px;min-height:64px}
+.vf .v{background:var(--ok);border-color:var(--ok);color:#fff}
+.vf .f{background:var(--vinho);border-color:var(--vinho);color:#fff}
+.flash-ok{animation:fok .35s}
+.flash-no{animation:fno .35s}
+@keyframes fok{0%{background:var(--ok-claro);border-color:var(--ok)}100%{}}
+@keyframes fno{0%{background:var(--vinho-claro);border-color:var(--vinho)}100%{}}
+
+@media (min-width:700px){
+  .trilha{grid-template-columns:1fr 1fr}
+  .fase.relampago{grid-column:1/-1}
+  .capa{padding:34px 32px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="topo">
+  <div class="topo-in">
+    <button class="marca" id="marca" type="button" aria-label="Voltar à trilha"><small>Sociologia · 2ª série</small>Trilha Sociológica</button>
+    <div class="placar"><span class="pill" aria-label="Pontos"><b id="pts">0</b> pts</span><span class="pill" aria-label="Estrelas"><b id="est">0</b>/15 ★</span></div>
+  </div>
+  <div class="barra" aria-hidden="true"><i id="barra"></i></div>
+</header>
+<main id="app"></main>
+<footer class="rodape">Colégio Notre Dame Ipanema · Sociologia · 3º trimestre de 2026 · Prof. Getulio Fidelis</footer>
+<noscript><p style="padding:20px;text-align:center">Este jogo precisa de JavaScript ativado no navegador.</p></noscript>
+<script>
+const FASES = [
+{
+  id: "c9", cap: "Capítulo 9", nome: "Raio-X do Brasil", tema: "Desigualdade e exclusão social",
+  rodadas: [
+    { tipo: "sort", titulo: "Indicador ou marcador?",
+      dica: "Indicador social é uma medida, quase sempre um número, sobre um aspecto da realidade. Marcador social é uma característica que diferencia pessoas e grupos.",
+      baldes: ["Indicador social", "Marcador social"],
+      itens: [
+        ["Índice de Gini", 0, "É uma medida: vai de 0 a 1 e mostra a concentração de renda."],
+        ["Cor ou raça", 1, "É uma característica que diferencia grupos. No Censo, é autodeclarada."],
+        ["Expectativa de vida", 0, "É um número que informa sobre a saúde de uma população."],
+        ["Gênero", 1, "É um marcador construído socialmente, que diferencia grupos."],
+        ["PIB per capita", 0, "É uma medida: o PIB dividido pelo número de habitantes."],
+        ["Idade", 1, "É um marcador: distingue grupos como crianças, jovens e idosos."],
+        ["Taxa de analfabetismo", 0, "É um número que informa sobre a educação de uma população."],
+        ["Religião", 1, "É um marcador construído socialmente."],
+        ["IDH", 0, "É uma medida que combina renda, saúde e educação."],
+        ["Classe social", 1, "É um marcador. A renda de cada classe, medida em números, é que funciona como indicador."],
+      ] },
+    { tipo: "match", titulo: "Cada índice no seu lugar",
+      dica: "Toque em um nome e, depois, na descrição que combina com ele.",
+      fichas: ["PIB", "PIB per capita", "IDH", "IDH ajustado", "Índice de Gini", "Censo"],
+      itens: [
+        ["Soma de todos os bens e serviços produzidos em um país durante um período.", 0, "O PIB mede o tamanho da economia, não a qualidade de vida."],
+        ["Riqueza produzida dividida pelo número de habitantes: uma média que não mostra como a renda é distribuída.", 1, "Por ser média, o PIB per capita pode subir mesmo com a renda concentrada em poucos."],
+        ["Combina três dimensões: renda, saúde (expectativa de vida) e educação.", 2, "O IDH nasceu como alternativa ao PIB: desenvolvimento é mais que riqueza."],
+        ["Desconta do desenvolvimento humano as perdas causadas pela desigualdade.", 3, "No Brasil, o IDH cai de 0,786 para 0,594 quando ajustado: de \"alto\" para \"médio\"."],
+        ["Vai de 0 a 1: quanto mais perto de 1, mais concentrada está a renda.", 4, "O Gini revela o que a média esconde: a distribuição."],
+        ["Levantamento do IBGE que conta e caracteriza toda a população, em geral a cada dez anos.", 5, "O Censo mostra, por exemplo, o envelhecimento da população brasileira."],
+      ] },
+    { tipo: "quiz", titulo: "Leitura de dados",
+      dica: "Escolha a alternativa correta.",
+      itens: [
+        ["Dois países têm o mesmo PIB per capita. No país A, o Índice de Gini é 0,28; no país B, 0,58. O que se pode afirmar?",
+          ["No país B, a renda está mais concentrada.", "No país B, a população é mais rica.", "No país A, a economia produz mais.", "Os dois países têm exatamente a mesma desigualdade."],
+          "Com a mesma média, quem mostra a diferença é o Gini: quanto mais perto de 1, maior a concentração de renda."],
+        ["O rendimento médio da população aumentou, mas o Índice de Gini também subiu. O que isso indica?",
+          ["A renda cresceu, mas ficou mais concentrada.", "Todos os grupos melhoraram na mesma proporção.", "A pobreza deixou de existir no país.", "A produção de riquezas do país diminuiu."],
+          "A média pode subir porque os mais ricos ganharam muito mais. A alta do Gini mostra que a distância aumentou."],
+        ["Um aterro de resíduos tóxicos é instalado ao lado de uma comunidade quilombola, que não foi consultada sobre a obra. A situação é um exemplo de:",
+          ["racismo ambiental.", "democracia racial.", "consciência de classe.", "mobilidade social."],
+          "No racismo ambiental, o dano recai sobre grupos étnicos específicos, que ainda são excluídos das decisões."],
+        ["Nos anos 1950, pesquisas de Florestan Fernandes e Roger Bastide cruzaram renda, moradia, saúde e educação com a cor da população. O resultado ajudou a desmontar a ideia de:",
+          ["democracia racial.", "luta de classes.", "racismo estrutural.", "consciência coletiva."],
+          "Os dados mostraram que o Brasil não era um exemplo de convivência harmônica entre as raças."],
+        ["Para Marx e Engels, o que separa a burguesia do proletariado?",
+          ["A posse dos meios de produção.", "O nível de escolaridade de cada grupo.", "O lugar onde cada um mora.", "A idade dos trabalhadores."],
+          "A burguesia é dona de máquinas, imóveis e ferramentas. O proletariado tem apenas sua força de trabalho."],
+        ["O que a Constituição de 1988 trouxe para os povos indígenas?",
+          ["Garantiu seus direitos e reconheceu o país pluriétnico.", "Determinou sua integração obrigatória à cultura nacional.", "Extinguiu as terras indígenas que já estavam demarcadas.", "Criou o Marco Temporal para limitar as demarcações."],
+          "Foi a primeira Constituição a garantir esses direitos. O Marco Temporal é uma tese posterior, que os ameaça."],
+      ] },
+  ],
+},
+{
+  id: "c10", cap: "Capítulo 10", nome: "O olho que tudo vê", tema: "Foucault: sociedade da vigilância",
+  rodadas: [
+    { tipo: "match", titulo: "Dicionário de Foucault",
+      dica: "Toque em um conceito e, depois, na descrição que combina com ele.",
+      fichas: ["Suplício", "Corpo dócil", "Instituições de sequestro", "Microfísica do poder", "Panóptico", "Poder disciplinar"],
+      itens: [
+        ["Punição pública, aplicada sobre o corpo, feita como espetáculo para mostrar a força de quem pune.", 0, "O suplício devia ser visto por todos e deixar marcas no condenado."],
+        ["Resultado da disciplina: é, ao mesmo tempo, útil (produtivo) e obediente.", 1, "Não esqueça as duas metades: utilidade e obediência."],
+        ["Escola, fábrica, quartel, hospital e prisão: espaços que capturam o tempo e o corpo das pessoas para moldá-las.", 2, "São instituições pelas quais quase todos passam ao longo da vida."],
+        ["O poder não é uma coisa que alguém possui: ele se exerce em rede, nas pequenas relações do dia a dia.", 3, "Por isso o poder não está só no Estado: está na família, na escola, no namoro."],
+        ["Modelo de prédio com torre central: quem está nas celas pode ser visto a qualquer momento, mas não vê quem vigia.", 4, "Foi idealizado por Jeremy Bentham e analisado por Foucault."],
+        ["Em vez de castigar com violência, treina, vigia e corrige os indivíduos.", 5, "É a forma de poder típica das sociedades modernas."],
+      ] },
+    { tipo: "sort", titulo: "Os recursos para o bom adestramento",
+      dica: "Vigilância hierárquica é o olhar que observa. Sanção normalizadora é o castigo que corrige. Exame é a avaliação que registra e classifica.",
+      baldes: ["Vigilância hierárquica", "Sanção normalizadora", "Exame"],
+      itens: [
+        ["Inspetores circulando pelos corredores durante o intervalo.", 0, "É o olhar que observa: alguém é encarregado de vigiar."],
+        ["Ficar sem recreio por não ter feito a tarefa.", 1, "É a micropenalidade: pune um pequeno desvio para corrigir."],
+        ["Boletim com notas que comparam e classificam a turma.", 2, "O exame mede, compara e classifica cada pessoa."],
+        ["Sala em que o professor enxerga todas as carteiras de uma só vez.", 0, "A arquitetura organiza o espaço para que todos sejam vistos."],
+        ["Advertência por chegar atrasado.", 1, "O atraso é um desvio pequeno, punido para normalizar a conduta."],
+        ["Prova bimestral que registra o desempenho de cada estudante.", 2, "O exame transforma cada pessoa em um caso documentado."],
+        ["Supervisor que acompanha, de uma cabine de vidro, o trabalho na fábrica.", 0, "A vigilância se torna uma função especializada na produção."],
+        ["Refazer dez vezes o mesmo exercício por desatenção.", 1, "Castigar, na disciplina, é exercitar: a punição treina."],
+        ["Ficha individual com o histórico e as observações sobre o aluno.", 2, "O registro escrito faz parte do exame."],
+      ] },
+    { tipo: "quiz", titulo: "Vigiar e punir",
+      dica: "Escolha a alternativa correta.",
+      itens: [
+        ["Quem idealizou o Panóptico, que Foucault depois analisou em Vigiar e punir?",
+          ["Jeremy Bentham.", "Michel Foucault.", "Émile Durkheim.", "Karl Marx."],
+          "Bentham projetou o Panóptico no século XVIII. Foucault o usou para explicar o poder disciplinar."],
+        ["Por que, para Foucault, o Panóptico torna o poder mais eficiente?",
+          ["Porque a pessoa, sem saber se é observada, vigia a si mesma.", "Porque coloca um guarda armado dentro de cada cela do prédio.", "Porque troca a vigilância pelo uso de castigos físicos.", "Porque esconde dos vigiados a existência da torre central."],
+          "O poder passa a funcionar sozinho: dispensa a força física e até a presença constante do vigia."],
+        ["Na expressão \"corpo dócil\", o que a disciplina busca aumentar ao mesmo tempo?",
+          ["A utilidade e a obediência.", "A liberdade e a criatividade.", "A força física e a rebeldia.", "O descanso e o tempo livre."],
+          "Quanto mais produtivo, mais submisso. São as duas metades do conceito."],
+        ["Em comparação com o suplício, a punição disciplinar moderna:",
+          ["troca o espetáculo da dor pelo treinamento e pela vigilância.", "aumenta a violência física para que ela sirva de exemplo a todos.", "abandona qualquer forma de controle sobre os indivíduos.", "volta a ser aplicada em praça pública, diante da multidão."],
+          "O poder deixa de marcar o corpo e passa a treiná-lo, de modo discreto e permanente."],
+        ["O sinal toca e a aula começa; cinquenta minutos depois, toca de novo. Esse elemento do controle da atividade é:",
+          ["o horário.", "o suplício.", "o exame.", "a microfísica."],
+          "Para Foucault, o controle do tempo é uma das bases da disciplina."],
+        ["Para Foucault, a escola é uma instituição de sequestro porque:",
+          ["controla tempo, espaço e corpos para formar pessoas úteis e obedientes.", "impede a matrícula dos estudantes que vêm das famílias mais pobres do país.", "funciona somente no interior das prisões e dos quartéis militares.", "ensina os estudantes a questionar toda e qualquer forma de poder."],
+          "Horários, filas, uniformes, provas e punições ajudam a produzir corpos dóceis."],
+      ] },
+  ],
+},
+{
+  id: "c11", cap: "Capítulo 11", nome: "Regras do jogo", tema: "Controle social: norma, crime e desvio",
+  rodadas: [
+    { tipo: "sort", titulo: "As três marcas do fato social",
+      dica: "Para Durkheim, o fato social tem coerção (pressiona e pune), exterioridade (existe fora e antes de nós) e generalidade (é comum ao grupo).",
+      baldes: ["Coerção", "Exterioridade", "Generalidade"],
+      itens: [
+        ["Quem fura a fila escuta reclamações de todo mundo.", 0, "A reprovação do grupo pressiona a pessoa a seguir a regra."],
+        ["A língua portuguesa já existia antes de você nascer.", 1, "O fato social existe fora e antes do indivíduo."],
+        ["Em toda a cidade, os carros param no sinal vermelho.", 2, "A regra é comum à coletividade."],
+        ["Usar roupa de praia em um velório provoca olhares de reprovação.", 0, "Os olhares são uma forma de punição: é a coerção em ação."],
+        ["As regras da sua escola foram criadas antes da sua matrícula.", 1, "Você não as inventou: encontrou-as prontas."],
+        ["Cumprimentar ao chegar é um costume da maior parte da sociedade.", 2, "O costume é compartilhado pelo grupo."],
+        ["Quem não paga a conta de luz tem a energia cortada.", 0, "Há uma sanção para quem descumpre a regra."],
+        ["Você não inventou o calendário: recebeu-o pronto.", 1, "Ele vem de fora e independe da sua vontade."],
+        ["O hábito vale para o grupo inteiro, e não só para uma pessoa.", 2, "É a generalidade: vale para todos."],
+      ] },
+    { tipo: "sort", titulo: "Ideia ou ação?",
+      dica: "Preconceito é uma ideia negativa sobre um grupo. Discriminação é a ação que coloca essa ideia em prática e exclui pessoas.",
+      baldes: ["Preconceito", "Discriminação"],
+      itens: [
+        ["Acreditar que moradores de certo bairro são perigosos.", 0, "É uma ideia, um julgamento antecipado."],
+        ["Recusar um currículo por causa do endereço do candidato.", 1, "A ideia virou ação: alguém foi excluído."],
+        ["Achar que meninas são piores em matemática.", 0, "É uma crença, ainda no campo das ideias."],
+        ["Barrar alguém na entrada de uma loja por causa da aparência.", 1, "É uma ação que impede o acesso a um espaço."],
+        ["Julgar a inteligência de uma pessoa pelo sotaque.", 0, "É um julgamento feito antes de conhecer a pessoa."],
+        ["Pagar menos a uma mulher que ocupa o mesmo cargo.", 1, "É uma prática concreta de exclusão."],
+        ["Supor que uma pessoa idosa não sabe usar tecnologia.", 0, "É uma suposição, e não um ato."],
+        ["Negar atendimento a um casal por ser homoafetivo.", 1, "A ação nega um serviço a um grupo."],
+      ] },
+    { tipo: "quiz", titulo: "Caso a caso",
+      dica: "Leia a situação e escolha o conceito.",
+      itens: [
+        ["Pedro acha \"natural\" que só as mulheres da família lavem a louça e nunca pensou no assunto. Ele está no:",
+          ["espaço de alienação.", "espaço de transgressão.", "campo do punitivismo.", "controle social formal."],
+          "Na alienação, a pessoa aceita a norma de forma passiva, sem perceber a coerção."],
+        ["No início do século XX, mulheres enfrentaram prisões e críticas para conquistar o direito ao voto, que a lei lhes negava. Elas ocuparam o:",
+          ["espaço de transgressão.", "espaço de alienação.", "lugar do estigma social.", "espaço da consciência coletiva."],
+          "Na transgressão, a pessoa questiona a norma e assume os riscos de enfrentá-la para mudar a ordem."],
+        ["Depois de aparecer no trabalho com o cabelo colorido, Bia passou a ouvir piadas de duplo sentido e a receber olhares tortos. Ninguém disse que era um castigo. Trata-se de uma punição:",
+          ["velada.", "visível.", "restaurativa.", "judicial."],
+          "A punição velada não é assumida: aparece em olhares, piadas e exclusões silenciosas."],
+        ["\"Só penas mais duras e mais prisões resolvem a violência.\" Essa visão é chamada de:",
+          ["punitivismo.", "justiça restaurativa.", "consciência coletiva.", "transgressão."],
+          "O Brasil tem uma das maiores populações presas do mundo, e a população não se sente mais segura."],
+        ["Dois estudantes brigam. Em vez de suspendê-los, a escola promove um encontro com mediador, para que conversem e reparem o dano. A prática se inspira na:",
+          ["justiça restaurativa.", "justiça punitiva.", "punição velada.", "solidariedade mecânica."],
+          "A justiça restaurativa busca reparar o dano pelo diálogo entre quem causou e quem sofreu."],
+        ["Para Durkheim, o conjunto de crenças e sentimentos comuns à média dos membros de uma sociedade é a:",
+          ["consciência coletiva.", "microfísica do poder.", "consciência de classe.", "banalidade do mal."],
+          "A consciência coletiva não depende das condições particulares de cada indivíduo."],
+        ["Família, escola, Igreja e Estado regulam condutas e punem quem descumpre suas regras. Na Sociologia, são exemplos de:",
+          ["instituições sociais.", "marcadores sociais.", "indicadores sociais.", "espaços de transgressão."],
+          "As instituições são exteriores ao indivíduo e coercitivas: impõem sanções."],
+      ] },
+  ],
+},
+{
+  id: "c12", cap: "Capítulo 12", nome: "Carteira de trabalho", tema: "Relações de trabalho no Brasil",
+  rodadas: [
+    { tipo: "order", titulo: "Linha do tempo do trabalho",
+      dica: "Coloque os acontecimentos em ordem, do mais antigo ao mais recente. Use as setas.",
+      itens: [
+        ["1888", "Abolição da escravidão no Brasil."],
+        ["1932", "Decretos de Vargas fixam a jornada em 8 horas diárias."],
+        ["1943", "Vargas reúne as leis trabalhistas na CLT."],
+        ["1988", "A Constituição reduz o limite para 44 horas semanais."],
+        ["2017", "A reforma trabalhista altera vários artigos da CLT."],
+        ["2026", "Uma emenda constitucional extingue a escala 6x1."],
+      ],
+      fecho: "Repare: os decretos de 1932 e a CLT de 1943 vieram de um governo sem Poder Legislativo. Em 2026, a mudança passou pelo Congresso, depois de ampla mobilização social." },
+    { tipo: "match", titulo: "Os cinco requisitos do emprego",
+      dica: "Toque em um requisito e, depois, na descrição que combina com ele.",
+      fichas: ["Pessoa física", "Onerosidade", "Subordinação", "Habitualidade", "Pessoalidade"],
+      itens: [
+        ["Só gente pode ser empregada: quando uma empresa contrata outra, o vínculo é empresarial, e não trabalhista.", 0, "É por isso que a \"pejotização\" tenta disfarçar o vínculo de emprego."],
+        ["O trabalho é pago: quem trabalha recebe salário.", 1, "Oneroso é o contrário de gratuito."],
+        ["Quem trabalha cumpre ordens de quem contrata.", 2, "É o requisito no centro do debate sobre a uberização."],
+        ["O serviço é prestado com frequência, e não só de vez em quando.", 3, "Pode ser todo dia ou três vezes por semana: o que conta é a regularidade."],
+        ["O trabalhador não pode mandar outra pessoa em seu lugar.", 4, "O contrato é feito com aquela pessoa específica."],
+      ] },
+    { tipo: "quiz", titulo: "Direitos em disputa",
+      dica: "Escolha a alternativa correta.",
+      itens: [
+        ["Por que a legislação trabalhista da Era Vargas é considerada ambígua?",
+          ["Porque concedeu direitos, mas pôs os sindicatos sob controle do Estado.", "Porque aumentou a jornada de trabalho e reduziu o valor dos salários.", "Porque foi aprovada pelo Congresso sem nenhuma participação do governo federal.", "Porque valia somente para os trabalhadores do campo e das fazendas."],
+          "É a \"modernização autoritária\": direitos de um lado, dependência e controle de outro. Atenção: os decretos limitaram a jornada, não a aumentaram."],
+        ["Como foram criados os decretos trabalhistas de 1932?",
+          ["Pelo chefe de governo, pois o Poder Legislativo não funcionava.", "Por votação no Congresso Nacional, depois de uma longa greve geral.", "Por um plebiscito em que os trabalhadores votaram diretamente.", "Por decisão dos tribunais, a pedido dos sindicatos de patrões."],
+          "No Governo Provisório e no Estado Novo, quem fazia as leis era o próprio Vargas."],
+        ["Uma dentista atende em consultório próprio, define seus horários e não recebe ordens de ninguém. Seu trabalho é:",
+          ["autônomo.", "precarizado.", "empregado.", "intermitente."],
+          "No trabalho autônomo, falta a subordinação. Autônomo não é sinônimo de precarizado."],
+        ["Marta trabalha todos os dias em uma loja, cumpre horário e recebe ordens da gerente, mas nunca teve a carteira assinada. Seu trabalho é:",
+          ["precarizado.", "autônomo.", "eventual.", "intermitente."],
+          "Na precarização, os requisitos do emprego estão presentes, mas os direitos não são respeitados."],
+        ["No debate sobre a \"uberização\", quem defende que existe vínculo de emprego argumenta que o aplicativo:",
+          ["controla o trabalho por metas, notas e punições: há subordinação.", "paga um salário fixo, todos os meses, a cada um dos seus motoristas.", "proíbe o trabalhador de exercer qualquer outra atividade remunerada.", "assina a carteira de trabalho, mas deixa de recolher a Previdência."],
+          "O discurso diz \"você é seu próprio chefe\", mas o algoritmo dá ordens, avalia e pune."],
+        ["O Princípio da Hipossuficiência do Empregado afirma que:",
+          ["o trabalhador é o lado mais fraco e precisa de mais proteção da lei.", "o patrão pode reduzir os salários sempre que a empresa estiver em crise.", "patrão e empregado negociam em condições de total igualdade de forças.", "o Estado não deve interferir nos contratos firmados entre as partes."],
+          "É um princípio do Direito do Trabalho, tensionado por pontos da reforma de 2017."],
+      ] },
+  ],
+},
+{
+  id: "c14", cap: "Capítulo 14", nome: "Conexão com ética", tema: "Ética e ambiente virtual",
+  rodadas: [
+    { tipo: "match", titulo: "Conceitos em rede",
+      dica: "Toque em um conceito e, depois, na descrição que combina com ele.",
+      fichas: ["Moral", "Ética", "Imperativo categórico", "Banalidade do mal", "Neutralidade da rede", "Privacidade dos usuários"],
+      itens: [
+        ["Conjunto de valores que orienta o senso de certo e errado de uma pessoa.", 0, "A moral diz respeito aos valores de cada indivíduo, muitos deles compartilhados."],
+        ["Reflexão sobre as ações morais: avalia o caso e o contexto e pergunta se aquilo seria justo para todos.", 1, "A ética é o estudo reflexivo das ações morais."],
+        ["Agir apenas segundo uma regra que você gostaria de ver seguida por todas as pessoas.", 2, "É a proposta de Kant: a máxima da ação deve poder valer como lei universal."],
+        ["A violência se torna corriqueira, e as pessoas a praticam sem refletir sobre o que fazem.", 3, "É o conceito de Hannah Arendt, criado ao estudar o nazismo."],
+        ["As operadoras não podem cobrar valores diferentes conforme o site ou o serviço acessado.", 4, "É um dos princípios do Marco Civil da Internet."],
+        ["Dados e hábitos de navegação só podem ser revelados com ordem judicial.", 5, "Também é um princípio do Marco Civil da Internet."],
+      ] },
+    { tipo: "sort", titulo: "Liberdade ou abuso?",
+      dica: "A liberdade de expressão exige que a pessoa se identifique e responda pelo que diz. Ela não protege o anonimato, o discurso de ódio nem a exposição de outras pessoas.",
+      baldes: ["Liberdade de expressão", "Abuso: não é protegido"],
+      itens: [
+        ["Publicar, com seu nome, uma crítica à merenda da escola.", 0, "É opinião assinada: quem fala se identifica e responde pelo que diz."],
+        ["Criar um perfil falso para xingar um colega.", 1, "A Constituição garante a manifestação do pensamento, mas veda o anonimato."],
+        ["Espalhar um meme com a foto de alguém, sem autorização, para humilhar.", 1, "Viola o direito à imagem e à honra, protegido pela Constituição."],
+        ["Assinar um abaixo-assinado contra o aumento da passagem.", 0, "É participação política identificada."],
+        ["Postar mensagens de ódio contra uma religião.", 1, "Discurso de ódio e intolerância não são protegidos."],
+        ["Denunciar, identificando-se e com provas, um caso de agressão.", 0, "Denunciar um ato violento é diferente de difamar alguém."],
+        ["Inventar um boato que destrói a reputação de uma professora.", 1, "É difamação: expõe a pessoa ao desprezo público."],
+        ["Discordar publicamente de uma decisão do governo.", 0, "Criticar o poder público faz parte da vida democrática."],
+      ] },
+    { tipo: "quiz", titulo: "Leis e casos",
+      dica: "Escolha a alternativa correta.",
+      itens: [
+        ["Um aluno filma a professora durante a aula e posta o vídeo sem pedir autorização. Qual direito, garantido pela Constituição, ele viola?",
+          ["O direito à imagem e à vida privada.", "O direito de ir e vir livremente.", "O direito de votar e de ser votado.", "O direito de fazer greve no trabalho."],
+          "O artigo 5º, inciso X, declara invioláveis a intimidade, a vida privada, a honra e a imagem."],
+        ["Como aplicar o teste de Kant antes de compartilhar um vídeo que expõe alguém?",
+          ["Perguntar: e se todos fizessem o mesmo, com qualquer um?", "Verificar quantas curtidas o vídeo já recebeu nas redes.", "Conferir se a pessoa exposta é famosa ou desconhecida.", "Esperar que outro colega compartilhe antes de você."],
+          "Se a regra \"expor pessoas\" valesse para todos, ninguém estaria seguro. A ação é reprovada."],
+        ["Hannah Arendt formulou o conceito de banalidade do mal ao analisar:",
+          ["o nazismo, em que pessoas comuns cumpriam ordens sem refletir.", "as redes sociais, em que algoritmos escolhem o que se vê.", "a Revolução Industrial, que explorava o trabalho de crianças e mulheres.", "a escravidão no Brasil, que durou mais de três séculos."],
+          "O mal se torna banal quando é praticado como rotina, por quem deixou de pensar no que faz."],
+        ["A lei que tornou crime invadir dispositivos eletrônicos para obter dados ficou conhecida como:",
+          ["Lei Carolina Dieckmann.", "Lei Maria da Penha.", "Marco Civil da Internet.", "Lei Geral de Proteção de Dados."],
+          "A lei é de 2012 e recebeu o nome da atriz que teve fotos íntimas roubadas e divulgadas."],
+        ["Segundo o Dossiê Violência de Gênero na Internet, na divulgação de imagens íntimas sem consentimento, o julgamento costuma recair sobre:",
+          ["a mulher exposta, e não sobre quem cometeu o crime.", "a plataforma que hospeda as imagens divulgadas.", "os familiares e os amigos da pessoa que agrediu.", "os parlamentares que votaram as leis sobre a internet."],
+          "As mulheres são a grande maioria das vítimas e sofrem danos muitas vezes irreversíveis."],
+        ["O documentário \"Quem matou Eloá?\" critica, sobretudo:",
+          ["o espetáculo que a mídia fez da violência contra a mulher.", "a ausência de leis sobre o uso de celulares dentro das escolas.", "a cobrança de valores diferentes para cada serviço da internet.", "a falta de regras para o trabalho dos entregadores de aplicativo."],
+          "Programas de TV chegaram a telefonar para o sequestrador, em busca de audiência."],
+      ] },
+  ],
+},
+];
+
+const BLITZ = [
+  ["O PIB per capita mostra como a renda está distribuída entre a população.", false, "Ele é uma média: não mostra a distribuição."],
+  ["Quanto mais próximo de 1 o Índice de Gini, maior a concentração de renda.", true, "O Gini vai de 0 a 1."],
+  ["O IDH considera renda, saúde e educação.", true, "São as três dimensões do índice."],
+  ["Cor ou raça é um indicador social.", false, "É um marcador social da diferença."],
+  ["O racismo ambiental atinge igualmente todos os grupos sociais.", false, "Ele recai sobre grupos étnicos específicos, como indígenas e quilombolas."],
+  ["O Panóptico foi projetado por Michel Foucault.", false, "Foi idealizado por Jeremy Bentham. Foucault o analisou."],
+  ["Para Foucault, o poder está apenas nas mãos do Estado.", false, "Ele circula por todas as relações: é a microfísica do poder."],
+  ["O corpo dócil é útil e obediente ao mesmo tempo.", true, "Utilidade e obediência: as duas metades do conceito."],
+  ["O suplício era uma punição pública aplicada sobre o corpo.", true, "Era um espetáculo do poder de punir."],
+  ["No Panóptico, a pessoa vigiada acaba vigiando a si mesma.", true, "Por não saber quando é observada, ela se autocontrola."],
+  ["As marcas do fato social são coerção, exterioridade e generalidade.", true, "É a definição de Durkheim."],
+  ["No espaço de alienação, a pessoa questiona as normas e enfrenta os riscos.", false, "Isso é o espaço de transgressão."],
+  ["Preconceito é uma ideia; discriminação é uma ação.", true, "A discriminação coloca o preconceito em prática."],
+  ["A justiça restaurativa busca reparar o dano por meio do diálogo.", true, "Ela reúne quem causou e quem sofreu o dano."],
+  ["Punitivismo é a crença de que penas mais duras resolvem a violência.", true, "É a visão criticada no capítulo."],
+  ["A CLT foi votada pelo Congresso Nacional em 1943.", false, "Foi decretada por Vargas, no Estado Novo, sem Poder Legislativo."],
+  ["Os decretos de Vargas aumentaram a jornada de trabalho.", false, "Eles a limitaram a 8 horas diárias."],
+  ["Trabalho autônomo é o mesmo que trabalho precarizado.", false, "No autônomo, falta a subordinação. No precarizado, os direitos são negados."],
+  ["Pessoalidade significa que o empregado não pode mandar outra pessoa em seu lugar.", true, "O contrato é com aquela pessoa específica."],
+  ["No debate sobre a uberização, o requisito em discussão é a subordinação.", true, "A pergunta é se o aplicativo dá ordens e controla o trabalho."],
+  ["A liberdade de expressão protege quem ofende usando um perfil anônimo.", false, "A Constituição veda o anonimato."],
+  ["Para Kant, devemos agir de um modo que possa valer para todas as pessoas.", true, "É o imperativo categórico."],
+  ["Na banalidade do mal, a violência vira rotina e é praticada sem reflexão.", true, "É o conceito de Hannah Arendt."],
+  ["A Constituição protege a intimidade e a imagem das pessoas.", true, "Está no artigo 5º, inciso X."],
+];
+
+
+(function () {
+  "use strict";
+  var app = document.getElementById("app");
+  var PONTOS = 10;
+  var CHAVE = "trilha-sociologica-2ano-3tri";
+  var estado = { pts: 0, melhor: {}, relampago: 0 };
+
+  try {
+    var salvo = JSON.parse(localStorage.getItem(CHAVE) || "null");
+    if (salvo && typeof salvo === "object") {
+      estado.pts = +salvo.pts || 0; estado.melhor = salvo.melhor || {}; estado.relampago = +salvo.relampago || 0;
+    }
+  } catch (e) { /* sem armazenamento: o jogo funciona do mesmo jeito */ }
+  function salvar() { try { localStorage.setItem(CHAVE, JSON.stringify(estado)); } catch (e) {} }
+
+  // ---------- utilidades ----------
+  function el(tag, attrs, filhos) {
+    var n = document.createElement(tag), k;
+    attrs = attrs || {};
+    for (k in attrs) {
+      if (k === "class") n.className = attrs[k];
+      else if (k === "text") n.textContent = attrs[k];
+      else if (k.slice(0, 2) === "on") n.addEventListener(k.slice(2), attrs[k]);
+      else n.setAttribute(k, attrs[k]);
+    }
+    (filhos || []).forEach(function (f) { if (f) n.appendChild(typeof f === "string" ? document.createTextNode(f) : f); });
+    return n;
+  }
+  function embaralhar(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  function estrelasDe(acertos, total) {
+    var p = total ? acertos / total : 0;
+    return p >= 0.9 ? 3 : p >= 0.7 ? 2 : p >= 0.5 ? 1 : 0;
+  }
+  function estrelasEl(n) {
+    var s = el("span", { class: "estrelas", "aria-label": n + " de 3 estrelas" });
+    for (var i = 0; i < 3; i++) s.appendChild(el("span", { class: i < n ? "on" : "", text: "★", "aria-hidden": "true" }));
+    return s;
+  }
+  function totalEstrelas() {
+    return FASES.reduce(function (s, f) { return s + (estado.melhor[f.id] || 0); }, 0);
+  }
+  function placar() {
+    document.getElementById("pts").textContent = estado.pts;
+    document.getElementById("est").textContent = totalEstrelas();
+  }
+  function barra(p) { document.getElementById("barra").style.width = Math.round(p * 100) + "%"; }
+  function tela(filhos) {
+    app.innerHTML = "";
+    filhos.forEach(function (f) { if (f) app.appendChild(f); });
+    window.scrollTo(0, 0);
+    placar();
+  }
+  function ganhar(n) { estado.pts += n; salvar(); placar(); }
+  function cabecalho(onde, titulo, cont) {
+    return el("div", { class: "cab" }, [
+      el("div", {}, [el("div", { class: "onde", text: onde }), el("h2", { text: titulo })]),
+      cont ? el("div", { class: "cont", id: "cont", text: cont }) : null
+    ]);
+  }
+  function retorno(certo, titulo, texto, resp) {
+    return el("div", { class: "retorno" + (certo ? "" : " nao"), role: "status" }, [
+      el("strong", { text: titulo }),
+      resp ? el("p", { class: "resp", text: resp }) : null,
+      el("p", { text: texto })
+    ]);
+  }
+  function botao(texto, fn, classe) {
+    return el("button", { class: "btn" + (classe ? " " + classe : ""), type: "button", text: texto, onclick: fn });
+  }
+
+  // ---------- início ----------
+  function inicio() {
+    barra(0);
+    var feitas = FASES.filter(function (f) { return estado.melhor[f.id] !== undefined; }).length;
+    var trilha = el("div", { class: "trilha" });
+    FASES.forEach(function (f, i) {
+      var feita = estado.melhor[f.id] !== undefined;
+      trilha.appendChild(el("button", { class: "fase" + (feita ? " feita" : ""), type: "button", onclick: function () { jogarFase(i); } }, [
+        el("span", { class: "num", text: String(i + 1), "aria-hidden": "true" }),
+        el("span", { class: "txt" }, [
+          el("span", { class: "cap", text: f.cap }), el("h3", { text: f.nome }), el("span", { class: "tema", text: f.tema })
+        ]),
+        estrelasEl(estado.melhor[f.id] || 0)
+      ]));
+    });
+    trilha.appendChild(el("button", { class: "fase relampago", type: "button", onclick: relampago }, [
+      el("span", { class: "num", text: "V/F", "aria-hidden": "true", style: "font-size:16px" }),
+      el("span", { class: "txt" }, [
+        el("span", { class: "cap", text: "Todos os capítulos" }), el("h3", { text: "Desafio relâmpago" }),
+        el("span", { class: "tema", text: "Verdadeiro ou falso contra o relógio: 90 segundos." + (estado.relampago ? " Seu recorde: " + estado.relampago + " acertos." : "") })
+      ])
+    ]));
+
+    tela([
+      el("section", { class: "capa" }, [
+        el("div", { class: "sobre", text: "Revisão · 3º trimestre" }),
+        el("h1", { text: "Trilha Sociológica" }),
+        el("p", { text: "Cinco fases, uma para cada capítulo estudado. Classifique, combine, ordene e resolva casos para chegar à prova com o conteúdo em dia." }),
+        el("div", { class: "resumo" }, [
+          el("span", {}, [el("b", { text: feitas + "/5" }), " fases concluídas"]),
+          el("span", {}, [el("b", { text: String(totalEstrelas()) }), " de 15 estrelas"]),
+          el("span", {}, [el("b", { text: String(estado.pts) }), " pontos"])
+        ])
+      ]),
+      el("h2", { class: "sec", text: "Escolha uma fase" }),
+      trilha,
+      el("h2", { class: "sec", text: "Como funciona" }),
+      el("div", { class: "como" }, [
+        el("b", { text: "Vale a primeira tentativa. " }),
+        "Cada acerto de primeira rende " + PONTOS + " pontos. Com 90% de acertos, a fase vale 3 estrelas; com 70%, 2; com 50%, 1. Você pode repetir as fases quantas vezes quiser: fica guardada a sua melhor marca. Leia sempre a explicação que aparece depois de cada resposta: é ela que ajuda a estudar."
+      ]),
+      (feitas || estado.pts) ? el("div", { class: "acoes" }, [botao("Zerar meu progresso", function () {
+        estado = { pts: 0, melhor: {}, relampago: 0 }; salvar(); inicio();
+      }, "sec2")]) : null
+    ]);
+  }
+
+  // ---------- fase ----------
+  function jogarFase(i) {
+    var fase = FASES[i];
+    var total = fase.rodadas.reduce(function (s, r) { return s + r.itens.length; }, 0);
+    var st = { acertos: 0, feitos: 0, total: total, erros: [] };
+    var r = 0;
+    function progresso() { barra(st.feitos / st.total); }
+    function proxima() {
+      if (r >= fase.rodadas.length) return fimFase(i, st);
+      var rod = fase.rodadas[r];
+      var onde = fase.cap + " · rodada " + (r + 1) + " de " + fase.rodadas.length;
+      r++;
+      MOTORES[rod.tipo](rod, onde, st, progresso, proxima);
+    }
+    progresso();
+    proxima();
+  }
+
+  function registrar(st, certo, pergunta, explicacao) {
+    st.feitos++;
+    if (certo) { st.acertos++; ganhar(PONTOS); }
+    else st.erros.push([pergunta, explicacao]);
+  }
+
+  var MOTORES = {};
+
+  // classificar: uma carta por vez, dois ou três baldes
+  MOTORES.sort = function (rod, onde, st, progresso, fim) {
+    var itens = embaralhar(rod.itens), k = 0;
+    function mostrar() {
+      if (k >= itens.length) return fim();
+      var it = itens[k], respondido = false;
+      var ops = el("div", { class: "opcoes baldes" });
+      var area = el("div");
+      rod.baldes.forEach(function (b, bi) {
+        ops.appendChild(el("button", { class: "op", type: "button", text: b, onclick: function () {
+          if (respondido) return; respondido = true;
+          var certo = bi === it[1];
+          Array.prototype.forEach.call(ops.children, function (o, oi) {
+            o.disabled = true;
+            if (oi === it[1]) o.classList.add("certa"); else if (oi === bi) o.classList.add("errada");
+          });
+          registrar(st, certo, it[0] + " → " + rod.baldes[it[1]], it[2]); progresso();
+          area.appendChild(retorno(certo, certo ? "Isso mesmo!" : "Ainda não.", it[2], certo ? null : "Resposta: " + rod.baldes[it[1]] + "."));
+          var b2 = botao(k + 1 < itens.length ? "Próxima carta" : "Continuar", function () { k++; mostrar(); });
+          area.appendChild(el("div", { class: "acoes" }, [b2])); b2.focus();
+        } }));
+      });
+      tela([cabecalho(onde, rod.titulo, (k + 1) + "/" + itens.length), el("p", { class: "dica", text: rod.dica }),
+        el("div", { class: "carta", text: it[0] }), ops, area]);
+    }
+    mostrar();
+  };
+
+  // caso a caso: pergunta com quatro alternativas
+  MOTORES.quiz = function (rod, onde, st, progresso, fim) {
+    var itens = embaralhar(rod.itens), k = 0;
+    function mostrar() {
+      if (k >= itens.length) return fim();
+      var it = itens[k], certaTxt = it[1][0], respondido = false;
+      var ops = el("div", { class: "opcoes" });
+      var area = el("div");
+      embaralhar(it[1]).forEach(function (txt) {
+        ops.appendChild(el("button", { class: "op", type: "button", text: txt, onclick: function (ev) {
+          if (respondido) return; respondido = true;
+          var certo = txt === certaTxt;
+          Array.prototype.forEach.call(ops.children, function (o) {
+            o.disabled = true;
+            if (o.textContent === certaTxt) o.classList.add("certa"); else if (o === ev.currentTarget) o.classList.add("errada");
+          });
+          registrar(st, certo, it[0], certaTxt + " " + it[2]); progresso();
+          area.appendChild(retorno(certo, certo ? "Isso mesmo!" : "Ainda não.", it[2]));
+          var b2 = botao(k + 1 < itens.length ? "Próxima pergunta" : "Continuar", function () { k++; mostrar(); });
+          area.appendChild(el("div", { class: "acoes" }, [b2])); b2.focus();
+        } }));
+      });
+      tela([cabecalho(onde, rod.titulo, (k + 1) + "/" + itens.length), el("p", { class: "dica", text: rod.dica }),
+        el("div", { class: "carta pergunta", text: it[0] }), ops, area]);
+    }
+    mostrar();
+  };
+
+  // pares: toque no nome e na descrição
+  MOTORES.match = function (rod, onde, st, progresso, fim) {
+    var selF = null, selD = null, feitos = 0;
+    var errou = rod.itens.map(function () { return false; });
+    var fichas = el("div", { class: "fichas", role: "group", "aria-label": "Conceitos" });
+    var descs = el("div", { class: "descs" });
+    var aviso = el("p", { class: "aviso", role: "status" });
+    var area = el("div");
+    var botF = [], botD = [];
+
+    function limpar() {
+      botF.forEach(function (b) { b.classList.remove("sel"); b.setAttribute("aria-pressed", "false"); });
+      botD.forEach(function (b) { b.classList.remove("sel"); });
+      selF = null; selD = null;
+    }
+    function avaliar() {
+      if (selF === null || selD === null) return;
+      var f = selF, d = selD, it = rod.itens[d];
+      if (it[1] === f) {
+        var b = botD[d];
+        b.classList.remove("sel"); b.classList.add("ok"); b.disabled = true;
+        b.insertBefore(el("span", { class: "tag", text: rod.fichas[f] }), b.firstChild);
+        b.insertBefore(document.createElement("br"), b.childNodes[1]);
+        b.appendChild(el("span", { class: "ex", text: it[2] }));
+        botF[f].disabled = true;
+        registrar(st, !errou[d], rod.fichas[f] + ": " + it[0], it[2]); progresso();
+        feitos++; aviso.textContent = "";
+        document.getElementById("cont").textContent = feitos + "/" + rod.itens.length;
+        limpar();
+        if (feitos === rod.itens.length) {
+          var b2 = botao("Continuar", fim);
+          area.appendChild(retorno(true, "Todos os pares formados!", "Releia as explicações em verde antes de seguir."));
+          area.appendChild(el("div", { class: "acoes" }, [b2])); b2.focus();
+        }
+      } else {
+        errou[d] = true;
+        [botF[f], botD[d]].forEach(function (x) { x.classList.remove("treme"); void x.offsetWidth; x.classList.add("treme"); });
+        aviso.textContent = "Esse par não combina. Tente outra descrição.";
+        limpar();
+      }
+    }
+    rod.fichas.forEach(function (nome, fi) {
+      var b = el("button", { class: "ficha", type: "button", text: nome, "aria-pressed": "false", onclick: function () {
+        var era = selF === fi;
+        botF.forEach(function (x) { x.classList.remove("sel"); x.setAttribute("aria-pressed", "false"); });
+        selF = era ? null : fi;
+        if (!era) { b.classList.add("sel"); b.setAttribute("aria-pressed", "true"); }
+        avaliar();
+      } });
+      botF.push(b);
+    });
+    embaralhar(botF).forEach(function (b) { fichas.appendChild(b); });
+    var ordem = embaralhar(rod.itens.map(function (_, i) { return i; }));
+    rod.itens.forEach(function (it, di) {
+      var b = el("button", { class: "desc", type: "button", onclick: function () {
+        var era = selD === di;
+        botD.forEach(function (x) { x.classList.remove("sel"); });
+        selD = era ? null : di;
+        if (!era) b.classList.add("sel");
+        avaliar();
+      } }, [el("span", { text: it[0] })]);
+      botD[di] = b;
+    });
+    ordem.forEach(function (di) { descs.appendChild(botD[di]); });
+    tela([cabecalho(onde, rod.titulo, "0/" + rod.itens.length), el("p", { class: "dica", text: rod.dica }), fichas, descs, aviso, area]);
+  };
+
+  // ordenar: setas para subir e descer
+  MOTORES.order = function (rod, onde, st, progresso, fim) {
+    var n = rod.itens.length, ordem;
+    do { ordem = embaralhar(rod.itens.map(function (_, i) { return i; })); }
+    while (ordem.every(function (v, i) { return v === i; }));
+    var lista = el("ol", { class: "lista" });
+    var area = el("div");
+    var conferido = false;
+    function desenhar(focar) {
+      lista.innerHTML = "";
+      ordem.forEach(function (idx, pos) {
+        var certo = idx === pos;
+        var li = el("li", { class: conferido ? (certo ? "ok" : "no") : "" }, [
+          el("span", { class: "pos", text: String(pos + 1), "aria-hidden": "true" }),
+          el("span", { class: "tx" }, [conferido ? el("span", { class: "ano", text: rod.itens[idx][0] }) : null, rod.itens[idx][1]])
+        ]);
+        if (!conferido) {
+          var sobe = el("button", { class: "seta", type: "button", text: "▲", "aria-label": "Subir: " + rod.itens[idx][1], onclick: function () { mover(pos, -1); } });
+          var desce = el("button", { class: "seta", type: "button", text: "▼", "aria-label": "Descer: " + rod.itens[idx][1], onclick: function () { mover(pos, 1); } });
+          if (pos === 0) sobe.disabled = true;
+          if (pos === n - 1) desce.disabled = true;
+          li.appendChild(sobe); li.appendChild(desce);
+          if (focar && focar[0] === pos) setTimeout(function () { (focar[1] < 0 ? (sobe.disabled ? desce : sobe) : (desce.disabled ? sobe : desce)).focus(); }, 0);
+        }
+        lista.appendChild(li);
+      });
+    }
+    function mover(pos, d) {
+      var alvo = pos + d; if (alvo < 0 || alvo >= n) return;
+      var t = ordem[pos]; ordem[pos] = ordem[alvo]; ordem[alvo] = t;
+      desenhar([alvo, d]);
+    }
+    var bConf = botao("Conferir a ordem", function () {
+      conferido = true;
+      var certos = 0;
+      ordem.forEach(function (idx, pos) {
+        var ok = idx === pos; if (ok) certos++;
+        registrar(st, ok, rod.itens[idx][0] + " — " + rod.itens[idx][1], "Na linha do tempo, esse acontecimento ocupa a " + (idx + 1) + "ª posição.");
+      });
+      progresso();
+      desenhar();
+      area.innerHTML = "";
+      var tudo = certos === n;
+      area.appendChild(retorno(tudo, tudo ? "Linha do tempo perfeita!" : certos + " de " + n + " na posição certa.",
+        rod.fecho, tudo ? null : "Ordem correta: " + rod.itens.map(function (x) { return x[0]; }).join(" → ") + "."));
+      var b2 = botao("Continuar", fim);
+      area.appendChild(el("div", { class: "acoes" }, [b2])); b2.focus();
+    });
+    area.appendChild(el("div", { class: "acoes" }, [bConf]));
+    desenhar();
+    tela([cabecalho(onde, rod.titulo, n + " itens"), el("p", { class: "dica", text: rod.dica }), lista, area]);
+  };
+
+  // ---------- fim de fase ----------
+  function fimFase(i, st) {
+    var fase = FASES[i];
+    var n = estrelasDe(st.acertos, st.total);
+    var recorde = estado.melhor[fase.id] === undefined || n > estado.melhor[fase.id];
+    if (recorde) { estado.melhor[fase.id] = n; salvar(); }
+    barra(1);
+    var msg = n === 3 ? "Conteúdo dominado!" : n === 2 ? "Muito bem! Falta pouco." : n === 1 ? "Bom começo. Vale repetir a fase." : "Releia o capítulo e tente outra vez.";
+    var rever = null;
+    if (st.erros.length) {
+      var ul = el("ul");
+      st.erros.forEach(function (e) { ul.appendChild(el("li", {}, [el("b", { text: e[0] }), el("span", { text: e[1] })])); });
+      rever = el("div", { class: "rever" }, [el("h3", { text: "Para rever antes da prova" }), ul]);
+    }
+    var acoes = el("div", { class: "acoes" }, [
+      botao("Jogar de novo", function () { jogarFase(i); }, "sec2"),
+      i + 1 < FASES.length ? botao("Próxima fase", function () { jogarFase(i + 1); }) : botao("Desafio relâmpago", relampago, "ouro"),
+      botao("Voltar à trilha", inicio, "sec2")
+    ]);
+    tela([el("section", { class: "fim" }, [
+      el("div", { class: "onde", text: fase.cap + " · " + fase.nome, style: "font-size:12px;letter-spacing:.9px;text-transform:uppercase;color:var(--verde2);font-weight:800" }),
+      (function () { var s = estrelasEl(n); return s; })(),
+      el("h2", { text: msg }),
+      el("div", { class: "nums" }, [
+        el("div", {}, [el("b", { text: st.acertos + "/" + st.total }), el("span", { text: "acertos de primeira" })]),
+        el("div", {}, [el("b", { text: Math.round(100 * st.acertos / st.total) + "%" }), el("span", { text: "aproveitamento" })]),
+        el("div", {}, [el("b", { text: String(st.acertos * PONTOS) }), el("span", { text: "pontos na fase" })])
+      ]),
+      acoes, rever
+    ])]);
+    acoes.children[1].focus();
+  }
+
+  // ---------- desafio relâmpago ----------
+  var cronometro = null;
+  function parar() { if (cronometro) { clearInterval(cronometro); cronometro = null; } }
+  function relampago() {
+    parar();
+    var TEMPO = 90;
+    tela([
+      cabecalho("Todos os capítulos", "Desafio relâmpago"),
+      el("p", { class: "dica", text: "Você terá " + TEMPO + " segundos para julgar o maior número de afirmações. Cada acerto vale 5 pontos. No fim, você vê as explicações do que errou." }),
+      el("div", { class: "acoes" }, [botao("Começar", function () { rodar(TEMPO); }, "ouro"), botao("Voltar à trilha", inicio, "sec2")])
+    ]);
+    barra(0);
+  }
+  function rodar(TEMPO) {
+    var fila = embaralhar(BLITZ), k = 0, acertos = 0, erros = [], resta = TEMPO, acabou = false;
+    var carta = el("div", { class: "carta" });
+    var rel = el("div", { class: "cont relogio", id: "cont", text: resta + " s", role: "timer" });
+    var marcador = el("p", { class: "dica", text: "Acertos: 0" });
+    function fimJogo() {
+      if (acabou) return; acabou = true; parar();
+      ganhar(acertos * 5);
+      if (acertos > estado.relampago) { estado.relampago = acertos; salvar(); }
+      var rever = null;
+      if (erros.length) {
+        var ul = el("ul");
+        erros.forEach(function (e) { ul.appendChild(el("li", {}, [el("b", { text: e[0] + " (" + (e[1] ? "Verdadeiro" : "Falso") + ")" }), el("span", { text: e[2] })])); });
+        rever = el("div", { class: "rever" }, [el("h3", { text: "Para rever antes da prova" }), ul]);
+      }
+      var acoes = el("div", { class: "acoes" }, [botao("Tentar de novo", relampago, "ouro"), botao("Voltar à trilha", inicio, "sec2")]);
+      tela([el("section", { class: "fim" }, [
+        el("h2", { text: k >= fila.length ? "Você respondeu a tudo!" : "Tempo esgotado!" }),
+        el("div", { class: "nums" }, [
+          el("div", {}, [el("b", { text: String(acertos) }), el("span", { text: "acertos" })]),
+          el("div", {}, [el("b", { text: String(k) }), el("span", { text: "respondidas" })]),
+          el("div", {}, [el("b", { text: String(estado.relampago) }), el("span", { text: "seu recorde" })])
+        ]), acoes, rever
+      ])]);
+      barra(1); acoes.children[0].focus();
+    }
+    function responder(v) {
+      if (acabou) return;
+      var it = fila[k], certo = v === it[1];
+      if (certo) acertos++; else erros.push(it);
+      carta.classList.remove("flash-ok", "flash-no"); void carta.offsetWidth; carta.classList.add(certo ? "flash-ok" : "flash-no");
+      marcador.textContent = "Acertos: " + acertos;
+      k++;
+      if (k >= fila.length) return fimJogo();
+      carta.textContent = fila[k][0];
+    }
+    carta.textContent = fila[0][0];
+    var cab = el("div", { class: "cab" }, [el("div", {}, [el("div", { class: "onde", text: "Todos os capítulos" }), el("h2", { text: "Verdadeiro ou falso?" })]), rel]);
+    tela([cab, marcador, carta, el("div", { class: "opcoes vf" }, [
+      el("button", { class: "op v", type: "button", text: "Verdadeiro", onclick: function () { responder(true); } }),
+      el("button", { class: "op f", type: "button", text: "Falso", onclick: function () { responder(false); } })
+    ])]);
+    barra(0);
+    cronometro = setInterval(function () {
+      resta--; rel.textContent = resta + " s"; barra(1 - resta / TEMPO);
+      if (resta <= 10) rel.classList.add("fim-tempo");
+      if (resta <= 0) fimJogo();
+    }, 1000);
+  }
+
+  document.getElementById("marca").addEventListener("click", function () { parar(); inicio(); });
+  inicio();
+})();
+</script>
+</body>
+</html>
